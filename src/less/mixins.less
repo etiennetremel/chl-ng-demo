@@ -1,0 +1,17 @@
+.opacity(@opacity) {
+  @opacityPercentage: @opacity * 100;
+  opacity: @opacity;
+  -khtml-opacity: @opacity;
+  -moz-opacity: @opacity;
+  -ms-filter: ~"progid:DXImageTransform.Microsoft.Alpha(opacity=(@{opacityPercentage}))";
+  filter: ~"alpha(opacity = (@{opacityPercentage}))";
+}
+
+
+.transition(@param) {
+  -webkit-transition:@param;
+  -moz-transition:@param;
+  -ms-transition:@param;
+  -o-transition:@param;
+  transition:@param;
+}

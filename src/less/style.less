@@ -1,0 +1,384 @@
+//
+// Import
+//-----------------------
+@import 'mixins.less';
+@import 'font.less';
+
+
+//
+// Variables
+//-----------------------
+@red: #c0392b;
+@dark-blue: #34495e;
+
+
+//
+// Temporary
+//-----------------------
+html, body {
+  padding: 0;
+  margin: 0;
+}
+
+
+//
+// Typo
+//-----------------------
+h1 {
+  font-family: 'PFSquareSansProBold';
+  color: #fff;
+  font-size: 30px;
+  text-shadow: 1px 0 2px #9d2d22;
+  text-transform: uppercase;
+  padding: 50px 0;
+  margin: 0;
+  text-align: center;
+}
+
+//
+// Forms
+//-----------------------
+.field {
+  input {
+    width: 100%;
+    box-sizing: border-box;
+    border-radius: 4px;
+    background: #fff;
+    border: 0;
+    padding: 15px;
+    color: @dark-blue;
+    font-size: 17px;
+    font-family: Tahoma, sans-serif;
+  }
+}
+
+button {
+  cursor: pointer;
+  font-size: 17px;
+  width: 100%;
+  box-sizing: border-box;
+  background: @red;
+  padding: 15px;
+  color: #fff;
+  border: 0;
+  border-radius: 4px;
+  box-shadow: 0 3px 0 0 lighten(@red, 10%);
+}
+
+//
+// Layout
+//-----------------------
+#sng-home {
+  font-family: 'PFSquareSansProLight';
+  background: #fff;
+  position: relative;
+  margin: 0 auto;
+  position: relative;
+
+  #nav {
+    width: 127px;
+    margin-top: 20px;
+    right: 20px;
+    position: absolute;
+    z-index: 100;
+    text-align: center;
+
+    #progress-bar {
+      position: absolute;
+      top: 5px;
+      bottom: 5px;
+      width: 4px;
+      background: #bdc3c7;
+      left: 50%;
+      margin-left: -2px;
+      border-radius: 2px;
+      z-index: 10;
+      .cursor {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 100%;
+        border-radius: 2px;
+        background: @red;
+      }
+    }
+
+    .item {
+      position: relative;
+      z-index: 50;
+      margin-bottom: 40px;
+      .label {
+        font-family: 'PFSquareSansProRegular';
+        cursor: pointer;
+        font-size: 14px;
+        width: 100%;
+        box-sizing: border-box;
+        background: @red;
+        padding: 8px 15px;
+        color: #fff;
+        border: 0;
+        border-radius: 4px;
+        box-shadow: 0 3px 0 0 lighten(@red, 10%);
+        a {
+          text-decoration: none;
+          color: #fff;
+        }
+      }
+      .dot {
+        display: inline-block;
+        margin-top: 15px;
+        width: 12px;
+        height: 12px;
+        background: url(../img/dot.png) -12px 0;
+      }
+    }
+  }
+
+  .section {
+    width: 100%;
+    min-height: 650px;
+    position: relative;
+    display: inline-block;
+    .container {
+      width: 960px;
+      margin: 0 auto;
+    }
+  }
+
+  img {
+    border: none;
+  }
+
+  .divider {
+    right: 0;
+    left: 0;
+    img {
+      width: 100%;
+      height: auto;
+    }
+    &.top {
+      margin-top: -2px;
+    }
+    &.bottom {
+      bottom: -2px;
+    }
+  }
+
+  #landing {
+    background: #fff url(../img/landing.jpg) top center no-repeat;
+    background-size: cover;
+    padding-bottom: 80px;
+    .container {
+      padding: 50px 0;
+
+      .badge {
+        width: 280px;
+        float: left;
+      }
+
+      .title {
+        width: 540px;
+        float: left;
+        font-family: 'PFSquareSansProLight';
+        color: #fff;
+        font-size: 18px;
+        text-shadow: 0 1px 0 @red;
+        margin: 0;
+        text-align: center;
+        h1 {
+          padding: 0;
+        }
+      }
+
+      .imei-form {
+        width: 500px;
+        margin-left: -250px;
+        position: absolute;
+        bottom: 300px;
+        left: 50%;
+
+        .icon {
+          width: 100px;
+          float: left;
+        }
+
+        .form {
+          float: right;
+          position: relative;
+          width: 374px;
+          margin: -35px 0 0 0;
+          padding: 0;
+
+          .left-arrow {
+            position: absolute;
+            width: 14px;
+            top: 0;
+            bottom: 0;
+            left: -14px;
+            img {
+              display: block;
+              position: absolute;
+              top: 50%;
+              margin-top: -13px;
+            }
+          }
+
+          .inner-form {
+            width: 360px;
+            position: absolute;
+            top: 0;
+            left: 14px;
+            right: 0;
+            form {
+              margin: 0;
+              background: #ecf0f1;
+              border-radius: 6px;
+              padding: 20px 25px;
+              line-height: 60px;
+            }
+          }
+
+          .sub-form {
+            text-shadow: 1px 1px 0 rgba(255,255,255,.6);
+            width: 360px;
+            position: absolute;
+            left: 0;
+            padding: 0;
+            margin: 15px 0 0 0;
+            text-align: center;
+          }
+        }
+      }
+    }
+  }
+
+  #poem {
+    background: @red url(../img/poem.jpg) center center no-repeat;
+    background-size: cover;
+    .tag {
+      position: relative;
+      width: 766px;
+      margin: 100px auto;
+      color: #fff;
+      .content {
+        z-index: 10;
+        width: 90%;
+        padding: 5%;
+        position: absolute;
+      }
+      .bg {
+        z-index: 9;
+        position: absolute;
+        img {
+          width: 100%;
+          height: auto;
+        }
+      }
+    }
+    .divider.bottom {
+      position: absolute;
+      img {
+        vertical-align: bottom;
+      }
+    }
+  }
+
+  #gift {
+    background: #e64c3c url(../img/gift.jpg) center top no-repeat;
+    background-size: cover;
+
+    .content {
+      text-align: center;
+      .gift-item {
+        position: relative;
+        width: 420px;
+        margin: 0 auto;
+        padding: 50px 0;
+        #gift-wrap {
+          position: absolute;
+          top: 50px;
+          left: 0;
+          margin-left: 7px;
+          width: 407px;
+          height: 392px;
+          z-index: 10;
+        }
+        .gift-image {
+          position: absolute;
+          margin-left: 55px;
+          margin-top: 91px;
+          width: 210px;
+          height: 210px;
+          z-index: 9;
+        }
+        .gift-box {
+          position: relative;
+          margin-top: 5px;
+          width: 420px;
+          height: 382px;
+          z-index: 8;
+          text-align: center;
+        }
+        .arrow {
+          position: absolute;
+          bottom: -72px;
+          right: -49px;
+        }
+      }
+      .footer {
+        text-align: center;
+        position: relative;
+        color:#fff;
+
+        #claim-form {
+          .transition(margin-top linear 0.3s);
+          .opacity(1);
+          margin-top:0;
+
+          &.ng-hide {
+            .opacity(0);
+            margin-top: 100px;
+          }
+
+          &.ng-hide-add,
+          &.ng-hide-remove {
+            display: block !important;
+          }
+
+          left: 50%;
+          margin-left: -180px;
+          width: 360px;
+          z-index: 15;
+          position: absolute;
+
+          .top-arrow {
+            text-align: center;
+            height: 14px;
+          }
+
+          form {
+            background: #ecf0f1;
+            border-radius: 6px;
+            padding: 20px 25px;
+            line-height: 60px;
+          }
+        }
+      }
+    }
+
+    .divider.bottom {
+      position: absolute;
+      img {
+        vertical-align: bottom;
+      }
+    }
+
+  }
+
+  #terms {
+    h1 {
+      color: @red;
+    }
+  }
+}
