@@ -1,0 +1,402 @@
+<!doctype html>
+<html lang="en" ng-app="samsungApp">
+  <head>
+    <meta http-equiv="content-language" content="nl" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+    <link rel="stylesheet" href="css/style.css" />
+
+    <script src="js/lib/angular/angular.js"></script>
+    <script src="js/lib/angular/angular-animate.js"></script>
+    <script src="js/lib/angular/angular-sanitize.js"></script>
+    <script src="js/lib/jquery-1.5.min.js"></script>
+    <script src="js/lib/draggabilly.min.js"></script>
+  </head>
+  <body>
+
+    <div id="sng-home" ng-controller="MainCtrl">
+      <div id="nav" nav>
+        <div id="progress-bar">
+          <div class="cursor"></div>
+        </div>
+        <div class="item">
+          <div class="label"><a href="#landing">Typ je IMEI code</a></div>
+          <div class="dot active"></div>
+        </div>
+        <div class="item">
+          <div class="label"><a href="#poem">Lees je gedicht</a></div>
+          <div class="dot"></div>
+        </div>
+        <div class="item">
+          <div class="label"><a href="#gift">Open je cadeau!</a></div>
+          <div class="dot"></div>
+        </div>
+      </div>
+
+      <div id="landing" class="section" section>
+        <div class="container">
+          <div class="badge"><img src="img/badge.png" alt="Galaxy Gifts" /></div>
+          <div class="title">
+            <h1>Claim jouw<br />Samsung Galaxy Gift!</h1>
+            <p>Iedere Samsung Galaxy eigenaar maakt kans op prijzen!<br />
+            Bekijk wat we voor jouw hebben door je IMEI nummer in te vullen!</p>
+          </div>
+          <div class="imei-form">
+            <img class="icon" src="img/gift-icon.png" alt="" />
+
+            <div class="form">
+              <div class="inner-form">
+                <form name="imeiForm">
+                  <div class="left-arrow"><img src="img/left-arrow.png" alt="" /></div>
+                  <div class="field">
+                    <input
+                      type="text"
+                      value=""
+                      placeholder="IMEI Number"
+                      ng-model="imei"
+                      ng-pattern="/^[a-zA-Z0-9]{15}$/"
+                      required />
+                    <div class="validation" ng-show="imeiForm.$dirty && imeiForm.$error.pattern">
+                      <img src="img/invalid.png" alt="X" />
+                    </div>
+                    <div class="validation" ng-show="imeiForm.$dirty && !imeiForm.$error.pattern">
+                      <img src="img/valid.png" alt="V" />
+                    </div>
+                    <div class="loader" ng-show="imeiFormLoading"><img src="img/loader-small.gif" alt="Loading..." /></div>
+                  </div>
+                  <div class="field">
+                    <button ng-click="submitImei()">Claim jouw Samsung Galaxy Gift!</button>
+                  </div>
+                  <p class="sub-form">{{imeiMsg}}</p>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="poem" class="section" section>
+        <div class="divider top"><img src="img/divider-bottom.svg" alt="" /></div>
+        <div class="container">
+          <h1>Een persoonlijk gedicht, speciaal voor jou</h1>
+          <div class="tag">
+            <div class="content">
+              <h3>Beste,.....</h3>
+
+              <p>Al die tijd was ik aan het denken wat moet ik jou toch schenken???<br />
+              Ik keek in alle hoeken want oo waar moest ik jou cadeautje toch zoeken.<br />
+              Ik vroeg het aan iedereen .maar AU toen  viel ik over een steen.<br />
+              Hee wat ligt daar nou,dat is iets voor jou.<br />
+              Weet je wat het is geworden?<br />
+              Maak snel open en je hebt het uitgevonden.</p>
+
+              <h3>Groetjes Samsung</h3>
+            </div>
+            <div class="bg">
+              <img src="img/tag.png" alt="" />
+            </div>
+          </div>
+        </div>
+        <div class="divider bottom"><img src="img/divider-top-red.svg" alt="" /></div>
+      </div>
+
+      <div id="gift" class="section" section>
+        <div class="container">
+          <h1>Jouw cadeau, veel plezier ermee!</h1>
+          <div class="content">
+            <div class="gift-item">
+              <div id="gift-wrap" draggable><img src="img/gift-wrap.png" alt="" /></div>
+              <div class="gift-box">
+                <div class="gift-image">
+                  <img ng-src="{{product.thumbnail}}" alt="" />
+                </div>
+                <img src="img/gift-box.png" alt="" />
+              </div>
+              <div class="arrow" ng-show="(giftMsg === 'conceiled')"><img src="img/gift-arrow.png" alt="" /></div>
+            </div>
+            <div class="footer">
+              <div class="message" ng-show="(giftMsg === 'conceiled')">
+              <p>Gebruik je muis of vinger om de bovenkant van de doos eraf te tillen.<br />
+              Hieronder zit jouw cadeau!</p>
+              </div>
+
+              <div class="message" ng-show="(giftMsg === 'revealed')">
+                <p>Je hebt gekregen een <strong>{{product.gift}}</strong>!<br />
+                Vul je gegevens in om de prijs te ontvangen.</p>
+              </div>
+
+              <div class="message" ng-show="(giftMsg === 'thanks')">
+                <p>Je hebt gekregen een <strong>{{product.gift}}</strong>!<br />
+                Vul je gegevens in om de prijs te ontvangen.</p>
+
+                <p><strong>Bedankt!<br />
+                Je hebt {{product.gift}} geclaimed.</strong><br />
+                Houd je mail in de gaten voor een bevestiging!</p>
+              </div>
+
+              <div id="claim-form" class="animate" ng-show="showForm">
+                <div class="top-arrow"><img src="img/top-arrow.png" alt="" /></div>
+                <form name="claimForm">
+                  <div class="field">
+                    <input
+                      type="text"
+                      name="name"
+                      ng-model="candidate.name"
+                      value=""
+                      placeholder="Jouw naam"
+                      ng-minlength="2"
+                      required />
+                    <div class="validation" ng-show="claimForm.name.$dirty && claimForm.name.$error.minlength">
+                      <img src="img/invalid.png" alt="X" />
+                    </div>
+                    <div class="validation" ng-show="claimForm.name.$dirty && !claimForm.name.$error.minlength">
+                      <img src="img/valid.png" alt="V" />
+                    </div>
+                  </div>
+                  <div class="field">
+                    <input
+                      type="email"
+                      name="email"
+                      ng-model="candidate.email"
+                      value=""
+                      placeholder="Jouw emailadres"
+                      ng-pattern="/^[0-9a-zA-Z-_.]+@[0-9a-zA-Z-_.]+\.[0-9a-zA-Z.]+$/"
+                      required />
+                    <div class="validation" ng-show="claimForm.email.$dirty && claimForm.email.$error.pattern">
+                      <img src="img/invalid.png" alt="X" />
+                    </div>
+                    <div class="validation" ng-show="claimForm.email.$dirty && !claimForm.email.$error.pattern">
+                      <img src="img/valid.png" alt="V" />
+                    </div>
+                  </div>
+                  <div class="field">
+                    <input
+                      type="text"
+                      name="address"
+                      ng-model="candidate.address"
+                      value=""
+                      placeholder="Jouw adres"
+                      ng-minlength="2"
+                      required />
+                    <div class="validation" ng-show="claimForm.address.$dirty && claimForm.address.$error.minlength">
+                      <img src="img/invalid.png" alt="X" />
+                    </div>
+                    <div class="validation" ng-show="claimForm.address.$dirty && !claimForm.address.$error.minlength">
+                      <img src="img/valid.png" alt="V" />
+                    </div>
+                  </div>
+                  <div class="field">
+                    <input
+                      type="text"
+                      name="postcode"
+                      ng-model="candidate.postcode"
+                      value=""
+                      placeholder="Jouw postcode"
+                      ng-minlength="2"
+                      required />
+                    <div class="validation" ng-show="claimForm.postcode.$dirty && claimForm.postcode.$error.minlength">
+                      <img src="img/invalid.png" alt="X" />
+                    </div>
+                    <div class="validation" ng-show="claimForm.postcode.$dirty && !claimForm.postcode.$error.minlength">
+                      <img src="img/valid.png" alt="V" />
+                    </div>
+                  </div>
+                  <div class="field">
+                    <input
+                      type="text"
+                      name="city"
+                      ng-model="candidate.city"
+                      value=""
+                      placeholder="Jouw woonplaats"
+                      ng-minlength="2"
+                      required />
+                    <div class="validation" ng-show="claimForm.city.$dirty && claimForm.city.$error.minlength">dfgdfg
+                      <img src="img/invalid.png" alt="X" />
+                    </div>
+                    <div class="validation" ng-show="claimForm.city.$dirty && !claimForm.city.$error.minlength">aze
+                      <img src="img/valid.png" alt="V" />
+                    </div>
+                  </div>
+                  <div class="field">
+                    <button type="submit" ng-click="submitForm()">Claim je product!</button>
+                    <div class="loader" ng-show="claimFormLoading"><img src="img/loader-small.gif" alt="Loading..." /></div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="divider bottom"><img src="img/divider-top.svg" alt="" /></div>
+      </div>
+
+
+      <div id="terms" class="section" section>
+        <div class="container">
+
+          <h1>ALGEMENE EN BIJZONDERE VOORWAARDEN</h1>
+          <h4>Artikel 1 – Definities</h4>
+
+          <p>Actie: promotionele wedstrijd of promotionele actie zoals beschreven in de Bijzondere Actievoorwaarden.</p>
+
+          <p>Actieperiode: zoals bepaald in de Bijzondere Actievoorwaarden.</p>
+
+          <p>Actievoorwaarden: deze Algemene Actievoorwaarden, de Bijzondere Actievoorwaarden en eventuele bijkomende voorwaarden en bepalingen die Samsung bekend heeft gemaakt of in de loop van de actie bekendmaakt op haar website of in het winkelpunt. Hierbij wordt verduidelijkt dat de Bijzondere Actievoorwaarden in geval van een verschil tussen beiden voorgaan op de Algemene Actievoorwaarden. De Actievoorwaarden zijn geldig voor consumentenacties georganiseerd door Samsung Electronics Benelux B.V., gevestigd te Olof Palmestraat 10, 2616 LRDelft, Nederland, met een bijkantoor in Vilvoorde (1800) aan de Medialaan 50 te België, met ondernemingsnummer 0472.450.079.</p>
+
+          <p>Deelnemer: de persoon die deelneemt aan de Actie en daar op grond van artikel 2 van deze Algemene Actievoorwaarden ook toe is gerechtigd.</p>
+
+          <p>Actiegebied: territorium waarbinnen de Actie plaatsvindt. Uitsluitend een Deelnemer die in het Actiegebied woont, kan aan de Actie deelnemen. Indien de Actie gebonden is aan één of meerdere actiemodellen, heeft deze Actie enkel betrekking op de Actiemodellen die binnen het Actiegebied zijn aangekocht en geleverd.</p>
+
+          <p>Indien het een wedstrijd betreft, dan is de Winnaar die Deelnemer die op de in de Bijzondere Actievoorwaarden vastgestelde wijze een prijs krijgt toegewezen.</p>
+
+          <p>Voordeel: Elk voordeel dat kan gedaan worden bij een Actie waaronder bijvoorbeeld: een prijs, een cashback, een cadeau, zoals beschreven in de Bijzondere Actievoorwaarden.</p>
+
+          <p>Deelnamemateriaal: bijdragen van alle aard (video’s, teksten, foto’s, audio, tekeningen, schilderijen,…) van Deelnemers in het kader van een Actie.</p>
+
+          <p>Website: de website die gebruikt wordt in het kader van de Actie.</p>
+
+          <h4>Artikel 2 – Deelname</h4>
+
+          <p>Iedere natuurlijke persoon met een vaste woon- of verblijfplaats in het Actiegebied, die ouder dan 18 jaar is op het moment van deelname, mag deelnemen aan de Actie. Samsung is gerechtigd hiervan bewijs te vragen. Deelnemers jonger dan 18 jaar kunnen alleen deelnemen aan de Actie voor zover zij rechtsgeldig vertegenwoordigd worden.</p>
+
+          <p>Voor deelname aan de Actie is eventueel registratie via de Website vereist. De registratie is kosteloos. De voorwaarden van de registratie zijn diengevallend te raadplegen via de Website. De bevestiging van de registratie zal worden bezorgd op het opgegeven (e-mail)adres.</p>
+
+          <p>De Deelnemer dient te beschikken over een bestaand e-mailadres en adres in het Actiegebied. Deelnemers die onvolledige of valse (e-mail)adressen en/of namen gebruiken kunnen door Samsung worden uitgesloten van deelname.</p>
+
+          <p>Medewerkers van Samsung, van aan Samsung gelieerde ondernemingen, alsmede alle personen die direct of indirect bij (de organisatie van) de Actie of het Voordeel of de (indirecte) aanbieder van het Voordeel betrokken zijn en hun respectieve medewerkers, zijn uitgesloten van deelname.</p>
+
+          <p>In geval van misbruik, fraude, manipulatie of omzeiling van en inbreuk op de Actievoorwaarden is Samsung gerechtigd Deelnemers of groepen van Deelnemers uit te sluiten. Samsung is gerechtigd dit te doen op basis van een vermoeden en is niet gehouden de Deelnemer hiervan te informeren of tot bewijs dienaangaande te leveren.</p>
+
+          <p>Door deelname aan de Actie verklaart de Deelnemer zich akkoord met de Actievoorwaarden.</p>
+
+          <p>De Deelnemer kan enkel gedurende de Actieperiode deelnemen aan de Actie en uitsluitend op de in de Bijzonder Actievoorwaarden beschreven wijze. Indien de Deelnemer niet tijdig, te vroeg, niet op de voorgeschreven wijze, of anderszins onvolledig zijn inzending inlevert, wordt hij zonder nader bericht uitgesloten van deelneming.</p>
+
+          <p>Aan de deelname zijn geen kosten of voorwaarden verbonden, behoudens indien anders bepaalt in de Bijzondere Voorwaarden.</p>
+
+          <p>De Deelnemer verklaart en garandeert dat het Deelnamemateriaal dat hij/zij aan Samsung ter beschikking stelt in het kader van een Actie niet onrechtmatig is en niet in strijd is met de wet. In het bijzonder verklaart en garandeert de Deelnemer uitdrukkelijk dat het Deelnamemateriaal geen inbreuk maakt op (intellectuele eigendoms-)rechten van derden en niet kwetsend, beledigend, racistisch, smadelijk, lasterlijk, discriminerend of anderszins in strijd met de goede smaak of fatsoen is of kan zijn en evenmin misleidend of op enigerlei wijze onrechtmatig is of kan zijn. Samsung kan, indien zij naar haar vrij oordeel meent dat dit gepast of nodig is om één van voornoemde redenen of elke andere geldige reden, het Deelnamemateriaal weigeren of verwijderen, zonder dat de Deelnemer zich hiertegen kan verzetten.</p>
+
+          <p>De Deelnemer draagt alle huidige en toekomstige (intellectuele eigendoms-)rechten op het Deelnamemateriaal uitdrukkelijk en onvoorwaardelijk over aan Samsung, (1) voor zolang de betreffende rechten gelden en (2) in de mate dit is toegestaan door de wet. Samsung mag het Deelnamemateriaal wereldwijd en onbeperkt exploiteren en in licentie geven via ieder denkbaar medium na afloop van de Actieperiode. Daarnaast doet de Deelnemer afstand van enig recht op vergoeding in verband met het Deelnamemateriaal.</p>
+
+          <p>De Deelnemer kan slechts gedurende de Actieperiode een verzoek richten tot verwijdering van zijn Deelnamemateriaal, waarna het betreffende Deelnamemateriaal zo spoedig mogelijk verwijderd zal worden. Dit verzoek leidt tot de ongeldigverklaring van de deelname in het kader waarvan het Deelnamemateriaal werd overgemaakt. De betreffende Deelnemer zal niet meer in aanmerking komen voor het Voordeel voor wat die deelname betreft.</p>
+
+          <p>Indien een Deelnemer in strijd met de Actievoorwaarden heeft deelgenomen aan de Actie, behoudt Samsung zich het recht voor om voor het betreffende Voordeel een nieuwe Winnaar aan te duiden en/of de Deelnemer uit te sluiten voor deze en eventuele volgende acties. Samsung is niet verplicht te vermelden dat het Voordeel is komen te vervallen.</p>
+
+          <p>Deelname via bepaalde scripts, systemen, geautomatiseerde functies, of allerhande technieken die de winstkansen vergroten zijn verboden.</p>
+
+          <h4>Artikel 3 – Winnaars (enkel in geval het een wedstrijd betreft)</h4>
+
+          <p>De Winnaar(s) van de Actie zullen worden vastgesteld op de wijze bepaald in de aankondiging van de Actie, of op de Website of zoals bepaald in de Bijzondere Actievoorwaarden.</p>
+
+          <p>De Winnaar(s) zullen vermeld worden op de website van Samsung of zullen per telefoon of e-mail bericht ontvangen van de gewonnen Prijs.</p>
+
+          <p>Indien een Winnaar zich niet binnen maand bij Samsung heeft gemeld en de Prijs heeft aanvaard, heeft Samsung het recht om de aanspraak van die Winnaar op de Prijs te laten vervallen en voor de betreffende Prijs een nieuwe Winnaar aan te duiden. Samsung is niet verplicht te melden dat de Prijs is komen te vervallen.</p>
+
+          <p>Indien een Deelnemer onder meerdere of valse persoonsgegevens Voordelen wint, kan Samsung beslissen deze niet uit te keren.</p>
+
+          <p>Op verzoek van Samsung dient de Winnaar zich rechtsgeldig te kunnen identificeren om toekenning van de Prijs mogelijk te maken.</p>
+
+          <p>De Deelnemers, machtigen Samsung en/of de andere vennootschappen van de Samsung-groep in het Actiegebied om hun naam, voornaam, woonplaats en eventuele overgemaakte afbeeldingen, geluidsopnames, interviews en video’s te gebruiken (en met name om deze te weer te geven of mee te delen aan het publiek) op om het even welke drager (drukwerk, publicaties, film enz.) voor promotionele en andere doeleinden van Samsung en/of een andere vennootschap van de Samsung-groep in het Actiegebied, zonder recht op enige compensatie of vergoeding van Samsung en/of de genoemde vennootschappen. Zij machtigen Samsung en/of de andere vennootschappen van de Samsung-groep in het Actiegebied ook om foto’s van hen te nemen, video-opnames te maken en interviews af te nemen en deze voor onbepaalde duur te gebruiken (en met name om deze te weer te geven of mee te delen aan het publiek) al dan niet in combinatie met de hierboven genoemde persoonsgegevens van de betreffende personen, op om het even welke drager (drukwerk, publicaties, film enz.) voor promotionele doeleinden van Samsung en/of een andere vennootschap van de Samsung-groep in het Actiegebied, zonder recht op enige compensatie of vergoeding van Samsung en/of de genoemde vennootschappen, anders dan het Voordeel waarop zij eventueel recht hebben.</p>
+
+          <h4>Artikel 4 – Het Voordeel</h4>
+
+          <p>4.1 Het Voordeel is strikt persoonlijk, niet-inwisselbaar voor goederen en/of diensten en niet overdraagbaar zonder schriftelijke toestemming van Samsung.</p>
+
+          <h4>Artikel 5 – Kansspelbelasting</h4>
+
+          <p>5.1 Indien op het Voordeel de eventuele verschuldigde Kansspelbelasting dient te worden afgedragen, zal de verschuldigde kansspelbelasting worden voldaan door Samsung. De Kansspelbelasting zal niet in rekening worden gebracht bij de Deelnemer. De bepaling geldt enkel voor Acties in Nederland.</p>
+
+          <h4>Artikel 6 – Uitsluiting aansprakelijkheid</h4>
+
+          <p>Samsung is op geen enkele wijze aansprakelijkheid voor kosten en aanvullende uitgaven die de Deelnemer zou moet maken in verband (met het uitkeren of gebruik van) het Voordeel.</p>
+
+          <p>Samsung, haar medewerkers, de door haar ingeschakelde hulppersonen of derden zijn, behoudens opzet of grove schuld, niet aansprakelijk voor schade veroorzaakt door (het uitkeren van of het gebruik van) het Voordeel of door deelname van de Deelnemer aan de Actie.</p>
+
+          <p>Samsung, haar medewerkers, de door haar ingeschakelde hulppersonen of derden zijn, behoudens opzet of grove schuld, niet aansprakelijk voor schade veroorzaakt door storingen (van welke aard dan ook) in de software, de computer, het netwerk, het internet, waardoor de deelname van de Deelnemer niet, gebrekkig, vertraagd of te laat door Samsung is ontvangen.</p>
+
+          <p>Samsung geeft geen enkele garantie met betrekking tot het uitgekeerde Voordeel en sluit ieder aansprakelijkheid (behoudens opzet of grove schuld) in dat verband uit. Samsung is niet aansprakelijk voor (i) eventuele gebreken van het Voordeel, (ii) indien het Voordeel later dan aangekondigd wordt ontvangen, (iii) door de verkeerde persoon in ontvangst wordt genomen, (iv) of verloren of beschadigd is tijdens het versturen ervan of (v) indien het (vervangen) Voordeel op ondergeschikte punten afwijkt van het aangeboden Voordeel.</p>
+
+          <p>In geval van fraude door Deelnemer(s) kan Samsung niet verantwoordelijk gesteld worden.</p>
+
+          <p>De Deelnemer is exclusief aansprakelijk voor de inhoud van het Deelnamemateriaal dat hij ter beschikking stelt in het kader van de Actie. Samsung kan hiervoor in geen geval aansprakelijk gesteld worden. De Deelnemer zal Samsung vrijwaren tegen elke aanspraak van een derde in verband met de inhoud van de door de Deelnemer ingediende Deelnamemateriaal.</p>
+
+          <h4>Artikel 7 – Privacy</h4>
+
+          <p>7.1 De persoonsgegevens die door de Deelnemer in het kader van deze Actie aan Samsung worden meegedeeld, zijn onderworpen aan toepasselijke nationale wetgeving inzake privacy. Samsung zal deze gegevens in zijn hoedanigheid van verantwoordelijke voor de verwerking uitsluitend verwerken voor doeleinden die het goede verloop van de Actie beogen, eigen marktonderzoek en direct marketing, en voor doeleinden vermeld in artikel 3. De persoonsgegevens kunnen binnen het kader van de hiervoor vermelde doeleinden doorgegeven worden aan één of meerdere entiteiten van de groep waartoe Samsung behoort of in geval van een wettelijke verplichting of op verzoek van de politie of gerechtelijke autoriteiten. De persoonsgegevens zullen niet aan derden worden meegedeeld of verkocht.</p>
+
+          <p>In bepaalde gevallen kan de gebruiker deze persoonsgegevens ook via zijn account bij een sociale media verstrekken, zoals bijvoorbeeld via Facebook of Netlog. In dat geval zal Samsung enkel de via de sociale media verkregen gegevens verwerken die noodzakelijk zijn voor het verwezenlijken van de hieronder vermelde doeleinden.</p>
+
+          <p>7.2 Elke Deelnemer kan zijn wettelijk recht op toegang, verbetering en verzet tegen het gebruik voor direct marketing kosteloos uitoefenen door een schriftelijk, ondertekend en gedagtekend verzoek daartoe, samen met een recto-verso kopie van zijn identiteitskaart, te richten aan Samsung, per gewone post naar Samsung Electronics Benelux B.V., Olof Palmestraat 10, 2616 LRDelft, Nederland (voor Nederland) of Samsung Electronics Belgium, Medialaan 50, 1800 Vilvoorde (voor België en Luxemburg). Als het een elektronische identiteitskaart betreft, is ook een afdruk van de inhoud van de chip of een officieel attest van woonplaats vereist. De Deelnemer kan het volledige Samsung privacy-beleid nalezen ophttp://www.samsung.com/be_nl/info/privacy.html voor wat België betreft of http://www.samsung.com/nl/ voor wat Nederland betreft.</p>
+
+          <h4>Artikel 8 – Gedragscode Promotionele Kansspelen</h4>
+
+          <p>8.1 De Nederlandse Gedragscode Promotionele Kansspelen is op deze Actievoorwaarden en Actie van toepassing. Samsung handelt in overeenstemming met de Gedragscode. De bepaling geldt enkel voor Acties in Nederland.</p>
+
+          <h4>Artikel 9 – Klachten</h4>
+
+          <p>Met vragen, klachten of opmerkingen kan een ieder zich wenden tot de klantenservice van Samsung via het adres en telefoonnummer zoals vermeld in de Bijzondere Actievoorwaarden). De klantenservice is ook bereikbaar via het e-mail adres info@samsung.nl of info@samsung.be.</p>
+
+          <p>Samsung is niet gehouden tot enige correspondentie in verband met uitsluitingen volgens de artikelen 2.5 en 2.6, in verband met een verwijdering van het Deelnamemateriaal volgens artikel 2.9 of in verband met de uitslag van een Wedstrijd zoals bedoeld in artikel 3 van deze Algemene Voorwaarden.</p>
+
+          <p>Het uitblijven van reactie vanwege Samsung op een bericht, mail of schrijven van de Deelnemer, kan in geen geval beschouwd worden als instemming met de inhoud van dat bericht, die mail of dat schrijven.</p>
+
+          <h4>Artikel 10 – Slotbepalingen</h4>
+
+          <p>Samsung is gerechtigd deze Actievoorwaarden (zonder opgaaf van reden) te wijzigen of de Actie te annuleren indien de Actie in het licht van wettelijke of reglementaire bepalingen of interpretaties daarvan door overheidsinstanties niet of niet ongewijzigd kan worden verdergezet, indien de verdere uitvoering van de Actie feitelijk of anderszins onmogelijk of niet in dezelfde voorwaarden mogelijk is geworden of indien de omstandigheden rond deze Actie dermate zijn gewijzigd dat het verdere verloop ervan onredelijke of buiten verhouding extra kosten of moeilijkheden met zich brengt voor Samsung. De meest recente versie van deze Actievoorwaarden is gedurende de Actieperiode te raadplegen op de website.</p>
+
+          <p>De inhoud van de voorwaarden is onder voorbehoud van schrijffouten en interpretatie. Aan schrijffouten en vergissingen van Samsung kunnen geen rechten worden ontleend.</p>
+
+          <p>Op deze Actievoorwaarden is het recht van het Actiegebied bepaald in de Bijzondere Actievoorwaarden van toepassing, indien het Actiegebied meerdere landen behelst geldt de wetgeving van de woonplaats van de Deelnemer, zijnde: België, Nederland of Groot-Hertogdom Luxemburg.</p>
+
+          <p>Voor Deelnemers uit Nederland is de rechtbank van Den Haag bevoegd kennis te nemen van eventuele geschillen tussen Samsung en de Deelnemer, doch niet eerder dan dat partijen onderling overleg hebben gevoerd. Voor Deelnemers uit België is de rechtbank van Brussel bevoegd, en voor deelnemers uit het Groot-Hertogdom Luxemburg, is de rechtbank van Luxemburg (Stad), kennis te nemen van eventuele geschillen tussen Samsung en de Deelnemer. De Deelnemer en Samsung verbinden zich er echter toe om voorafgaand aan een eventuele procedure overleg te plegen en te trachten tot een minnelijke oplossing te komen.</p>
+
+          <h4>BIJZONDERE ACTIEVOORWAARDEN SAMSUNG</h4>
+
+          <p>Lees deze Bijzondere Actievoorwaarden en de bijhorende Algemene Actievoorwaarden zorgvuldig door.</p>
+
+          <p>Actie: Ga naar www.samsung.com/nl/promotion, klik op de promotie, vul het online aanmeldformulier in en print deze uit. Stuur het ingevulde aanmeldformulier, samen met de uitgeknipte E.A.N barcode van de sleeve, het IMEI nummer en een kopie van de aankoopbon uiterlijk tot 16 januari 2014 naar:</p>
+
+          <p>Samsung TVOH promotie</p>
+
+          <p>Antwoordnummer 10016</p>
+
+          <p>6200 XP MAASTRICHT</p>
+
+          <p>Bewijs van verzending of bestelbonnen of bankafschriften worden niet geaccepteerd, slechts (een kopie van) de factuur of de kassabon is geldig als bewijs van ontvangst of aankoop.</p>
+
+          <p>Voordeel: eigen ontwerp Samsung Galaxy S4, Galaxy S4 mini of Galaxy Fame of een kant en klare The Voice of Holland bedrukte case ter waarde van €14,95,- cadeau bij aankoop van een Samsung Galaxy S4, S4 mini of een prepaid Fame in combinatie met een Vodafone consumenten abonnement of het Vodafone Prepaid The voice of Holland Fame pakket. Door je gegevens in te vullen op de website maak je tussen 28 oktober 2013 en 6 december 2013 tevens kans op kaarten voor een The Voice of Holland live show.</p>
+
+          <p>Er kan voor de Samsung Galaxy S4 en S4 mini gekozen worden voor een soft of hard case. Voor de Samsung Galaxy fame kan er alleen gekozen worden voor de hard case. De bedrukte cases worden verstrekt op basis van volledig ingevulde aanmeldformulier, samen met de kopie van de aankoopbon, IMEI nummer van het toestel en uitgeknipte E.A.N code van de sleeve.</p>
+
+          <p>Tussen 28 oktober 2013 en 6 december 2013 maak je direct kans op The Voice of Holland live show kaarten. Winnaars van de The Voice of Holland kaarten zien direct op de actiesite of ze gewonnen hebben. Met een speciale actiecode kunnen de winnaars binnen 7 dagen na ontvangst van de code kijken op www.seetickets.nl welke live show zij kunnen bezoeken. Elke winnaar ontvangt 2 kaarten voor de betreffende live show. De kaarten zijn niet inwisselbaar voor kaarten van een ander The Voice of Holland live show. Er wordt alleen gecorrespondeerd met de winnaars van deze promotie.</p>
+
+          <p>Inzendingen die te laat en/of onvoldoende gefrankeerd en/of incompleet verzonden zijn, worden niet in behandeling genomen. Maak en bewaar kopieën van alle documenten die je verstuurt.</p>
+
+          <p>Samsung is niet verantwoordelijk voor beschadigde, zoekgeraakte of vertraagde inzendingen.</p>
+
+          <p>Het Voordeel kan niet worden ingewisseld voor contant geld.</p>
+
+          <p>Samsung streeft ernaar het Voordeel binnen de 6 weken af te leveren of persoonlijk aan de Deelnemer te overhandigen. Het kan voorkomen dat deze levertijd wordt overschreden.</p>
+
+          <p>Actieperiode: De actie voor kans maken op tickets voor de live show heeft een looptijd van 28 oktober 2013 tot en met 16 januari 2014</p>
+
+          <p>Actiegebied: De actie geldt alleen op goederen die in Nederland aangekocht en geleverd zijn en Deelnemers dienen in Nederland woonachtig te zijn.</p>
+
+          <p>Actiemodellen: De Actie is enkel geldig op volgende modellen: Samsung Galaxy S4, Samsung Galaxy S4 mini of Samsung Galaxy Fame in combinatie met een Vodafone consumenten abonnement of het Vodafone Prepaid The Voice of Holland Fame pakket.</p>
+
+          <p>Samsung is niet verantwoordelijk voor de beschikbaarheid van de Actiemodellen bij uw verkooppunt.</p>
+
+          <p>Uw gegevens worden behandeld conform de Wet Bescherming Persoonsgegevens.</p>
+
+          <p>Maximaal 1 inzending per aangekocht product per huishouden.</p>
+
+          <p>Vragen en opmerkingen over deze Actie kunt u schriftelijk doen aan: Samsung create your own cover promotie , antwoordnummer 10016, 6200 XP Maastricht of per e-mail naar samsung@consumercare.info.</p>
+
+          <p>Druk- en zetfouten voorbehouden.</p>
+
+          <p>Door deelname aan de Actie verklaart de Deelnemer zich akkoord met de Algemene Actievoorwaarden van Samsung zoals vermeld op <a href="http://www.samsung.com/nl/info/legal.html" target="_blank">http://www.samsung.com/nl/info/legal.html</a> of <a href="http://www.samsung.com/nl/promotion" target="_blank">http://www.samsung.com/nl/promotion</a>.</p>
+        </div>
+      </div>
+    </div>
+
+    <script src="js/app.js"></script>
+  </body>
+</html>
