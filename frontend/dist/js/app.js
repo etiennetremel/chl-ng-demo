@@ -29,6 +29,7 @@ var samsungApp = angular.module('samsungApp', [
       $http.get(apiUrl + '/gift')
         .success(function(data, status, headers, config) {
           $scope.product = data.gift;
+          $scope.product.thumbnail = data.gift.thumbnail || 'img/gift-image.png';
         });
 
       // IMEI check
@@ -43,6 +44,8 @@ var samsungApp = angular.module('samsungApp', [
             .error(function (err) {
               console.log(err);
               $scope.imeiFormLoading = false;
+              $scope.imeiMsg = 'IMEI not valid.';
+              $scope.imei = '';
             })
         } else {
           $scope.imeiMsg = 'IMEI not valid.';

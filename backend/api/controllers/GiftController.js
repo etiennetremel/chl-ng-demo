@@ -16,11 +16,11 @@ var GiftController = {
 
       if (gift) {
         res.send({
-          'status': 'valid',
+          'status': 'success',
           'gift': gift
         });
       } else {
-        res.send({
+        res.serverError({
           'status': 'error',
           'error': 'No gift available'
         });

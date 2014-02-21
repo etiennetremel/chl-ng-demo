@@ -8,10 +8,18 @@ var ImeiController = {
       imei: req.param('imei')
     }).done(function (err, imei) {
       if (err) return res.serverError(err);
-      res.send({
-        'status': 'success',
-        'id': imei.id
-      });
+
+      if (imei) {
+        res.send({
+          'status': 'success',
+          'id': imei.id
+        });
+      } else {
+        res.serverError({
+          'status': 'error',
+          'error': 'IMEI invalid'
+        });
+      }
     });
   }
 };
