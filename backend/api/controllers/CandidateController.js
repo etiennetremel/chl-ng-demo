@@ -14,10 +14,10 @@ var CanditateController = {
       if (imei) {
         // Check if not already a winner
         if (imei.hasBeenDrawn) {
-          return res.serverError({
+          return res.send({
             'status': 'error',
             'error': 'Sorry, you already won a gift. You can only participate once.'
-          });
+          }, 500);
         }
 
         // Check if candidate already applied today
@@ -43,10 +43,10 @@ var CanditateController = {
         }).done(function (err, candidate) {
 
           if (candidate) {
-            res.serverError({
+            res.send({
               'status': 'error',
               'error': 'Your are already in the draw.'
-            });
+            }, 500);
           } else {
 
             // Create Candidate
@@ -67,10 +67,10 @@ var CanditateController = {
           }
         });
       } else {
-        res.serverError({
+        res.send({
           'status': 'error',
           'error': 'IMEI invalid'
-        });
+        }, 500);
       }
     });
   }

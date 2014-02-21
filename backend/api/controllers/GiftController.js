@@ -20,10 +20,10 @@ var GiftController = {
           'gift': gift
         });
       } else {
-        res.serverError({
+        res.send({
           'status': 'error',
           'error': 'No gift available'
-        });
+        }, 500);
       }
     });
   }

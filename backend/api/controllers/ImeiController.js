@@ -15,10 +15,10 @@ var ImeiController = {
           'id': imei.id
         });
       } else {
-        res.serverError({
+        res.send({
           'status': 'error',
           'error': 'IMEI invalid'
-        });
+        }, 500);
       }
     });
   }
