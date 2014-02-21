@@ -8,6 +8,12 @@ var samsungApp = angular.module('samsungApp', [
   // API Url
   .constant('apiUrl', 'http://localhost:1337')
 
+  // Config App
+  .config(function ($httpProvider) {
+    delete $httpProvider.defaults.headers.common['X-Requested-With'];
+  })
+
+  // Controller
   .controller('MainCtrl', ['$scope', '$http', 'apiUrl',
     function($scope, $http, apiUrl) {
 
@@ -22,7 +28,6 @@ var samsungApp = angular.module('samsungApp', [
       // Fetch Gift
       $http.get(apiUrl + '/gift')
         .success(function(data, status, headers, config) {
-          $scope.thumbnail = data.thumbnail;
           $scope.product = data.gift;
         });
 
